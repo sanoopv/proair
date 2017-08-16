@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProAir", "ProAir\ProAir.csproj", "{85A999FD-03F1-4D43-886B-E2DC857EF629}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProAirTests", "ProAirTests\ProAirTests.csproj", "{4E6FC9B8-6A96-4B30-82A0-458BCBA8E607}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CBCA5A1-37F5-4553-8C20-14282BA92F42}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		ProAir.vsmdi = ProAir.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = ProAir.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85A999FD-03F1-4D43-886B-E2DC857EF629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85A999FD-03F1-4D43-886B-E2DC857EF629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85A999FD-03F1-4D43-886B-E2DC857EF629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85A999FD-03F1-4D43-886B-E2DC857EF629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E6FC9B8-6A96-4B30-82A0-458BCBA8E607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E6FC9B8-6A96-4B30-82A0-458BCBA8E607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E6FC9B8-6A96-4B30-82A0-458BCBA8E607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E6FC9B8-6A96-4B30-82A0-458BCBA8E607}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
