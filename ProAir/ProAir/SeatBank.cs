@@ -2,13 +2,13 @@
 
 namespace ProAir
 {
-    public class SeatBank
+    public class SeatBank : ISeatBank
     {
-        public bool[] Seats;
+        public bool[] Seats { get; set; }
 
-        public SeatBank(int seats)
+        public SeatBank(int seatsInBank)
         {
-            Seats = new bool[seats];
+            Seats = new bool[seatsInBank];
         }
 
         public int Vacancy()

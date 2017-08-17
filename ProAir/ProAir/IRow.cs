@@ -4,7 +4,7 @@ namespace ProAir
 {
     public interface IRow
     {
-        List<SeatBank> SeatBanks { get; set; }
+        List<ISeatBank> SeatBanks { get; set; }
         int VacantSeats();
     }
 }

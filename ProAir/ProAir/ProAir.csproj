@@ -45,6 +45,7 @@
     <Compile Include="IFlight.cs" />
     <Compile Include="IRow.cs" />
     <Compile Include="ISeatAllocator.cs" />
+    <Compile Include="ISeatBank.cs" />
     <Compile Include="ISeatDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Row.cs" />
