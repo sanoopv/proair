@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
-
 namespace ProAir
 {
     public class Airline
     {
         public Airline()
         {
-            Flights = new List<Flight>();
+            Flights = new List<IFlight>();
         }
 
-        public List<Flight> Flights;
-        public void Add(Flight flight)
+        public List<IFlight> Flights;
+        public void Add(IFlight flight)
         {
-            this.Flights.Add(flight);
+            Flights.Add(flight);
         }
     }
 }

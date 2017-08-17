@@ -3,9 +3,10 @@ using System.Linq;
 
 namespace ProAir
 {
-    public class Row
+    public class Row : IRow
     {
-        public List<SeatBank> SeatBanks;
+        public List<SeatBank> SeatBanks { get; set; }
+
         public Row(int[] seatGroups)
         {
             SeatBanks = new List<SeatBank>();

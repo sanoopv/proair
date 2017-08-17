@@ -65,7 +65,7 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            List<Flight> flights = airline.Flights;
+            List<IFlight> flights = airline.Flights;
             Assert.AreEqual(1, flights.Count);
         }
 
@@ -75,7 +75,7 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            List<Flight> flights = airline.Flights;
+            List<IFlight> flights = airline.Flights;
             Assert.AreEqual(1, flights.Count);
         }
         [TestMethod]
@@ -83,8 +83,8 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            Flight flight = airline.Flights[0];
-            List<Row> rows = flight.Rows;
+            IFlight flight = airline.Flights[0];
+            List<IRow> rows = flight.Rows;
             Assert.AreEqual(10, rows.Count);
         }
 
@@ -95,9 +95,10 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
+
             int expected = 70;
-            int actual = seatAllocator.VacantSeats();
+            int actual = seatAllocator.VacantSeats(airline.Flights[0]);
             Assert.AreEqual(expected, actual);
         }
 
@@ -106,9 +107,9 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(1, 1, 1, 1));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
             int expected = 3;
-            int actual = seatAllocator.VacantSeats();
+            int actual = seatAllocator.VacantSeats(airline.Flights[0]);
             Assert.AreEqual(expected, actual);
         }
 
@@ -117,9 +118,9 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
-            SeatDetail expected = new SeatDetail {Row = 1, Bank = 1, Seat = 1};
-            SeatDetail seatDetails = seatAllocator.AllocateSingleSeat();
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
+            ISeatDetail expected = new SeatDetail { Row = 1, Bank = 1, Seat = 1 };
+            ISeatDetail seatDetails = seatAllocator.AllocateSingleSeat(airline.Flights[0]);
             Assert.AreEqual(expected.Bank, seatDetails.Bank);
             Assert.AreEqual(expected.Row, seatDetails.Row);
             Assert.AreEqual(expected.Seat, seatDetails.Seat);
@@ -130,11 +131,11 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            SeatDetail expected = new SeatDetail { Row = 1, Bank = 2, Seat = 1 };
-            SeatDetail seatDetails = seatAllocator.AllocateSingleSeat();
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            ISeatDetail expected = new SeatDetail { Row = 1, Bank = 2, Seat = 1 };
+            ISeatDetail seatDetails = seatAllocator.AllocateSingleSeat(airline.Flights[0]);
             Assert.AreEqual(expected.Bank, seatDetails.Bank);
             Assert.AreEqual(expected.Row, seatDetails.Row);
             Assert.AreEqual(expected.Seat, seatDetails.Seat);
@@ -145,17 +146,17 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            seatAllocator.AllocateSingleSeat();
-            SeatDetail expected = new SeatDetail { Row = 2, Bank = 1, Seat = 2 };
-            SeatDetail seatDetails = seatAllocator.AllocateSingleSeat();
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
+            ISeatDetail expected = new SeatDetail { Row = 2, Bank = 1, Seat = 2 };
+            ISeatDetail seatDetails = seatAllocator.AllocateSingleSeat(airline.Flights[0]);
             Assert.AreEqual(expected.Bank, seatDetails.Bank);
             Assert.AreEqual(expected.Row, seatDetails.Row);
             Assert.AreEqual(expected.Seat, seatDetails.Seat);
@@ -166,10 +167,10 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(10, 2, 3, 2));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
-            SeatDetail[] allocatedSeats = seatAllocator.AllocateDoubleSeat();
-            SeatDetail expected1 = new SeatDetail { Row = 1, Bank = 1, Seat = 1 };
-            SeatDetail expected2 = new SeatDetail { Row = 1, Bank = 1, Seat = 2 };
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
+            ISeatDetail[] allocatedSeats = seatAllocator.AllocateDoubleSeat(airline.Flights[0]);
+            ISeatDetail expected1 = new SeatDetail { Row = 1, Bank = 1, Seat = 1 };
+            ISeatDetail expected2 = new SeatDetail { Row = 1, Bank = 1, Seat = 2 };
 
             Assert.AreEqual(expected2.Bank, allocatedSeats[0].Bank);
             Assert.AreEqual(expected2.Row, allocatedSeats[0].Row);
@@ -186,10 +187,10 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(2, 1, 1, 1));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
-            SeatDetail[] allocatedSeats = seatAllocator.AllocateDoubleSeat();
-            SeatDetail expected1 = new SeatDetail { Row = 1, Bank = 1, Seat = 1 };
-            SeatDetail expected2 = new SeatDetail { Row = 1, Bank = 2, Seat = 1 };
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
+            ISeatDetail[] allocatedSeats = seatAllocator.AllocateDoubleSeat(airline.Flights[0]);
+            ISeatDetail expected1 = new SeatDetail { Row = 1, Bank = 1, Seat = 1 };
+            ISeatDetail expected2 = new SeatDetail { Row = 1, Bank = 2, Seat = 1 };
 
 
             Assert.AreEqual(expected1.Bank, allocatedSeats[0].Bank);
@@ -206,12 +207,12 @@ namespace ProAirTests
         {
             Airline airline = new Airline();
             airline.Add(new Flight(2, 1, 1));
-            SeatAllocator seatAllocator = new SeatAllocator(airline.Flights[0]);
-            seatAllocator.AllocateSingleSeat();
+            ISeatAllocator seatAllocator = SeatAllocatorFactory.GetAllocator();
+            seatAllocator.AllocateSingleSeat(airline.Flights[0]);
             airline.Flights[0].Rows[1].SeatBanks[1].Seats[0] = true;
-            SeatDetail[] allocatedSeats = seatAllocator.AllocateDoubleSeat();
-            SeatDetail expected1 = new SeatDetail { Row = 1, Bank = 2, Seat = 1 };
-            SeatDetail expected2 = new SeatDetail { Row = 2, Bank = 1, Seat = 1 };
+            ISeatDetail[] allocatedSeats = seatAllocator.AllocateDoubleSeat(airline.Flights[0]);
+            ISeatDetail expected1 = new SeatDetail { Row = 1, Bank = 2, Seat = 1 };
+            ISeatDetail expected2 = new SeatDetail { Row = 2, Bank = 1, Seat = 1 };
 
             Assert.AreEqual(expected1.Bank, allocatedSeats[0].Bank);
             Assert.AreEqual(expected1.Row, allocatedSeats[0].Row);

@@ -2,14 +2,14 @@
 
 namespace ProAir
 {
-    public class Flight
+    public class Flight : IFlight
     {
         private int maxRows;
-        public List<Row> Rows;
+        public List<IRow> Rows { get; set; }
 
         public Flight(int maxRows = 10, params int[] seatBanks)
         {
-            Rows = new List<Row>();
+            Rows = new List<IRow>();
             this.maxRows = maxRows;
             for (int i = 0; i < maxRows; i++)
             {

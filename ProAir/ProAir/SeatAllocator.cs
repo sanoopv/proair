@@ -3,20 +3,14 @@ using System.Linq;
 
 namespace ProAir
 {
-    public class SeatAllocator
+    public class SeatAllocator : ISeatAllocator
     {
-        private Flight flight;
-        public SeatAllocator(Flight flight)
-        {
-            this.flight = flight;
-        }
-
-        public int VacantSeats()
+        public int VacantSeats(IFlight flight)
         {
             return flight.Rows.Sum(row => row.SeatBanks.Sum(bank => bank.Seats.Count(seat => !seat)));
         }
 
-        public SeatDetail AllocateSingleSeat()
+        public ISeatDetail AllocateSingleSeat(IFlight flight)
         {
             var seatBookedDetail = new SeatDetail();
             var seatAllocated = false;
@@ -43,40 +37,40 @@ namespace ProAir
             return seatBookedDetail;
         }
 
-        public SeatDetail[] AllocateDoubleSeat()
+        public ISeatDetail[] AllocateDoubleSeat(IFlight flight)
         {
-            var seatsBooked =  AllocateDoubleSeatFirstFullFit();
+            var seatsBooked =  AllocateDoubleSeatFirstFullFit(flight);
             if (seatsBooked.Length == 0)
             {
-                seatsBooked = AllocateDoubleSeatNearbyFit();
+                seatsBooked = AllocateDoubleSeatNearbyFit(flight);
             }
             if (seatsBooked.Length == 0)
             {
-                seatsBooked = AllocateDoubleSeatAnyFit();
+                seatsBooked = AllocateDoubleSeatAnyFit(flight);
             }
             return seatsBooked;
         }
 
-        private SeatDetail[] AllocateDoubleSeatAnyFit()
+        private ISeatDetail[] AllocateDoubleSeatAnyFit(IFlight flight)
         {
-            var seatsToBeBooked = 2;
-            var seatBookedDetailList = new List<SeatDetail>();
-            for (var i = 0; i < seatsToBeBooked; i++)
+            const int SEATS_TO_BE_BOOKED = 2;
+            var seatBookedDetailList = new List<ISeatDetail>();
+            for (var i = 0; i < SEATS_TO_BE_BOOKED; i++)
             {
-                seatBookedDetailList.Add(AllocateSingleSeat());
+                seatBookedDetailList.Add(AllocateSingleSeat(flight));
             }
             return seatBookedDetailList.ToArray();
         }
 
-        private SeatDetail[] AllocateDoubleSeatNearbyFit()
+        private ISeatDetail[] AllocateDoubleSeatNearbyFit(IFlight flight)
         {
-            var seatsToBeBooked = 2;
+            const int SEATS_TO_BE_BOOKED = 2;
             var seatsBooked = 0;
             var seatsAllocated = false;
-            var seatBookedDetailList = new List<SeatDetail>();
+            var seatBookedDetailList = new List<ISeatDetail>();
             for (var rowIndex = 0; rowIndex < flight.Rows.Count; rowIndex++)
             {
-                if (flight.Rows[rowIndex].VacantSeats() < seatsToBeBooked) continue;
+                if (flight.Rows[rowIndex].VacantSeats() < SEATS_TO_BE_BOOKED) continue;
                 for (var bankIndex = 0; bankIndex < flight.Rows[rowIndex].SeatBanks.Count; bankIndex++)
                 {
                     for (var seatIndex = 0; seatIndex < flight.Rows[rowIndex].SeatBanks[bankIndex].Seats.Length; seatIndex++)
@@ -91,7 +85,7 @@ namespace ProAir
                                 Seat = seatIndex + 1
                             });
                             seatsBooked++;
-                            if (seatsBooked == seatsToBeBooked)
+                            if (seatsBooked == SEATS_TO_BE_BOOKED)
                             {
                                 seatsAllocated = true;
                                 break;
@@ -107,24 +101,24 @@ namespace ProAir
             return seatBookedDetailList.ToArray();
         }
 
-        private SeatDetail[] AllocateDoubleSeatFirstFullFit()
+        private ISeatDetail[] AllocateDoubleSeatFirstFullFit(IFlight flight)
         {
-            var seatsToBeBooked = 2;
+            const int SEATS_TO_BE_BOOKED = 2;
             var seatAllocated = false;
-            var seatBookedDetailList = new List<SeatDetail>();
+            var seatBookedDetailList = new List<ISeatDetail>();
             for (var rowIndex = 0; rowIndex < flight.Rows.Count; rowIndex++)
             {
-                if (flight.Rows[rowIndex].VacantSeats() < seatsToBeBooked) continue;
+                if (flight.Rows[rowIndex].VacantSeats() < SEATS_TO_BE_BOOKED) continue;
                 for (var bankIndex = 0; bankIndex < flight.Rows[rowIndex].SeatBanks.Count; bankIndex++)
                 {
-                    if (flight.Rows[rowIndex].SeatBanks[bankIndex].Vacancy() < seatsToBeBooked) continue;
+                    if (flight.Rows[rowIndex].SeatBanks[bankIndex].Vacancy() < SEATS_TO_BE_BOOKED) continue;
                     var continuous = 0;
                     for (var seatIndex = 0; seatIndex < flight.Rows[rowIndex].SeatBanks[bankIndex].Seats.Length; seatIndex++)
                     {
                         if (!flight.Rows[rowIndex].SeatBanks[bankIndex].Seats[seatIndex])
                         {
                             continuous++;
-                            if (continuous == seatsToBeBooked)
+                            if (continuous == SEATS_TO_BE_BOOKED)
                             {
                                 seatAllocated = true;
                                 for (var i = 0; i < continuous; i++)
